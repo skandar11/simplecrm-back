@@ -1,0 +1,13 @@
+# compiled output
+/dist
+/node_modules
+
+# IDE - VSCode
+/.vscode
+
+# npm install output
+/yarn.lock
+/yarn-error.log
+
+# orm config
+/mikro-orm.config.ts
