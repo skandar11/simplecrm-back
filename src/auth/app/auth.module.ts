@@ -1,5 +1,7 @@
+import { JwtStrategy } from './../../infra/guards/jwt-strategy';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { MainConfigService } from 'src/infra/config/main-config.service';
@@ -17,8 +19,10 @@ import { UserEntity } from '../repositories/user.entity';
             useFactory: (config: MainConfigService) => config.jwtOptions,
             inject: [MainConfigService]
         }),
-        MikroOrmModule.forFeature({ entities: [UserEntity] })],
-    providers: [AuthService],
+        MikroOrmModule.forFeature({ entities: [UserEntity] }),
+        PassportModule.register({ defaultStrategy: "jwt" })
+    ],
+    providers: [AuthService, JwtStrategy],
     controllers: [AuthController]
 })
 export class AuthModule { }
