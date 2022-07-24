@@ -1,9 +1,9 @@
-import { UserRoleEnum } from './../user-role.enum';
+import { UserRoleEnum } from '../../infra/enums/user-role.enum';
 import { Entity, Enum, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid"
-import { UserRepository } from './user.repository';
-import { UserPayloadModel } from "src/auth/models/user-payload.model";
+import { UserRepository } from '../repositories/user.repository';
+import { UserPayloadModel } from "src/models/user-payload.model";
 
 @Entity({ tableName: "user", customRepository: () => UserRepository })
 export class UserEntity {

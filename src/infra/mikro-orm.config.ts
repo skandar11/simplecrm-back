@@ -2,7 +2,7 @@ import { LoadStrategy, Options } from "@mikro-orm/core";
 
 import { path } from "app-root-path"
 import { join } from 'path';
-import { UserEntity } from "../auth/repositories/user.entity";
+import { UserEntity } from "../DAL/entities/user.entity";
 
 const config: Options = {
     type: "postgresql",

@@ -1,4 +1,3 @@
-import { CreateClientDto } from './dto/create-client.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 
@@ -6,12 +5,13 @@ import * as bcrypt from "bcrypt";
 import { UniHttpException } from '@unistory/nestjs-common';
 import { v4 as uuid } from "uuid"
 
-import { LoginDto } from './dto/login.dto';
-import { SignupDto } from './dto/signup.dto';
-import { SuccessAuthDto } from './dto/success-auth.dto';
+import { LoginDto } from '../dto/login.dto';
+import { SignupDto } from '../dto/signup.dto';
+import { SuccessAuthDto } from '../dto/success-auth.dto';
+import { CreateClientDto } from '../dto/create-client.dto';
 
-import { UserEntity } from 'src/auth/repositories/user.entity';
-import { UserRepository } from './repositories/user.repository';
+import { UserEntity } from 'src/DAL/entities/user.entity';
+import { UserRepository } from '../DAL/repositories/user.repository';
 
 @Injectable()
 export class AuthService {
@@ -59,7 +59,7 @@ export class AuthService {
         await this._userRepository.persistAndFlush(user);
     }
 
-    async createClient(createClientDto: CreateClientDto, coachId: string): Promise<SuccessAuthDto> {
+    async createClient(createClientDto: CreateClientDto, coachId: string): Promise<LoginDto> {
         const { login, name } = createClientDto;
 
         const existsUser = await this._userRepository.findOne({ login });
@@ -75,7 +75,6 @@ export class AuthService {
         const user = new UserEntity(login, passwordHash, salt, false)
         user.createdBy = coachId;
         await this._userRepository.persistAndFlush(user);
-
-        return this.login({ login, password: tmpPassword });
+        return { login, password: tmpPassword };
     }
 }
