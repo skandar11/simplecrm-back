@@ -1,4 +1,4 @@
-import { UserRoleEnum } from '../../auth/user-role.enum';
+import { UserRoleEnum } from '../enums/user-role.enum';
 import { SetMetadata } from "@nestjs/common"
 
 // tslint:disable-next-line: variable-name

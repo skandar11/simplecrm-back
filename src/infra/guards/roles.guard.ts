@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common"
 import { Reflector } from "@nestjs/core"
-import { UserRoleEnum } from '../../auth/user-role.enum';
+import { UserRoleEnum } from '../enums/user-role.enum';
 
 /*
   Декоратор должен использоваться совместно с AuthGuard, поскольку ожидает user в request

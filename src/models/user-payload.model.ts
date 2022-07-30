@@ -1,4 +1,4 @@
-import { UserRoleEnum } from './../user-role.enum';
+import { UserRoleEnum } from '../infra/enums/user-role.enum';
 
 export class UserPayloadModel {
     id: string;
