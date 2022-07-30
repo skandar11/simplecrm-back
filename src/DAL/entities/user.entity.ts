@@ -1,5 +1,6 @@
+import { ClientInfoEntity } from './client-info.entity';
 import { UserRoleEnum } from '../../infra/enums/user-role.enum';
-import { Entity, Enum, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, Enum, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid"
 import { UserRepository } from '../repositories/user.repository';
@@ -27,6 +28,9 @@ export class UserEntity {
 
     @Property({ onCreate: () => new Date() })
     createdAt: Date;
+
+    @OneToOne(() => ClientInfoEntity, info => info.user, { owner: true, orphanRemoval: true, nullable: true })
+    clientInfo: ClientInfoEntity;
 
     constructor(login: string, password: string, salt: string, isCoach = true) {
         this.id = uuid();

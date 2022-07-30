@@ -1,8 +1,10 @@
-import { LoadStrategy, Options } from "@mikro-orm/core";
+import { Options } from "@mikro-orm/core";
 
 import { path } from "app-root-path"
 import { join } from 'path';
+
 import { UserEntity } from "../DAL/entities/user.entity";
+import { ClientInfoEntity } from './../DAL/entities/client-info.entity';
 
 const config: Options = {
     type: "postgresql",
@@ -11,7 +13,7 @@ const config: Options = {
     user: "postgres",
     password: "postgres",
     dbName: "coach-crm",
-    entities: [UserEntity],
+    entities: [UserEntity, ClientInfoEntity],
     migrations: {
         path: join(path, "dist/infra/migrations"),
         pathTs: join(path, "src/infra/migrations"),

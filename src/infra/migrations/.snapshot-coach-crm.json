@@ -15,6 +15,89 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "birth_day": {
+          "name": "birth_day",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "about": {
+          "name": "about",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "contraindications": {
+          "name": "contraindications",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "client_info",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "client_info_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
         "login": {
           "name": "login",
           "type": "varchar(255)",
@@ -69,6 +152,15 @@
           "nullable": false,
           "length": 6,
           "mappedType": "datetime"
+        },
+        "client_info_id": {
+          "name": "client_info_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
         }
       },
       "name": "user",
@@ -84,6 +176,15 @@
           "unique": true
         },
         {
+          "columnNames": [
+            "client_info_id"
+          ],
+          "composite": false,
+          "keyName": "user_client_info_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
           "keyName": "user_pkey",
           "columnNames": [
             "id"
@@ -94,7 +195,21 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {}
+      "foreignKeys": {
+        "user_client_info_id_foreign": {
+          "constraintName": "user_client_info_id_foreign",
+          "columnNames": [
+            "client_info_id"
+          ],
+          "localTableName": "public.user",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.client_info",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
     }
   ]
 }
