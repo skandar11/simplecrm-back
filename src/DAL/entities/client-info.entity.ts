@@ -23,10 +23,13 @@ export class ClientInfoEntity {
     birthDay: Date;
 
     @Property()
-    about: string;
-
-    @Property()
     contraindications: string;
+
+    @Property({ onUpdate: () => new Date() })
+    updateAt: Date;
+
+    @Property({ onCreate: () => new Date() })
+    createdAt: Date;
 
     @OneToOne(() => UserEntity, user => user.clientInfo)
     user: UserEntity;
@@ -38,9 +41,8 @@ export class ClientInfoEntity {
         this.email = email;
     }
 
-    public setAdditionalInfo(birthDay: Date, about: string, contraindications: string) {
+    public setAdditionalInfo(birthDay: Date, contraindications: string) {
         this.birthDay = birthDay;
-        this.about = about;
         this.contraindications = contraindications;
     }
 }

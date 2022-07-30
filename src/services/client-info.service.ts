@@ -1,10 +1,11 @@
-import { ClientInfoEntity } from './../DAL/entities/client-info.entity';
 import { UniHttpException } from '@unistory/nestjs-common';
 import { Injectable } from '@nestjs/common';
 
 import { UserRepository } from 'src/DAL/repositories/user.repository';
 import { ClientInfoRepository } from './../DAL/repositories/client.repository';
+
 import { SetClientInfoDto } from './../dto/set-client-info.dto';
+import { ClientInfoEntity } from './../DAL/entities/client-info.entity';
 
 @Injectable()
 export class ClientInfoService {
@@ -28,14 +29,13 @@ export class ClientInfoService {
             throw new UniHttpException("Info already set");
         }
 
-        const { phoneNumber, name, email, about, birthDay, contraindications } = setClientInfoDto;
+        const { phoneNumber, name, email, birthDay, contraindications } = setClientInfoDto;
         const info = new ClientInfoEntity(phoneNumber, name, email);
-        info.setAdditionalInfo(birthDay, about, contraindications);
+        info.setAdditionalInfo(birthDay, contraindications);
 
         info.user = client;
 
         await this._clientInfoRepository.persistAndFlush(info);
     }
 
-    private
 }

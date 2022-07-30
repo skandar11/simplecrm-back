@@ -25,10 +25,5 @@ export class SetClientInfoDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    about: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
     contraindications: string;
 }
