@@ -1,4 +1,5 @@
-import { Entity, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { TargetEntity } from './target.entity';
+import { Cascade, Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid";
 
@@ -23,13 +24,19 @@ export class ClientInfoEntity {
     birthDay: Date;
 
     @Property()
-    about: string;
-
-    @Property()
     contraindications: string;
+
+    @Property({ onUpdate: () => new Date() })
+    updateAt: Date;
+
+    @Property({ onCreate: () => new Date() })
+    createdAt: Date;
 
     @OneToOne(() => UserEntity, user => user.clientInfo)
     user: UserEntity;
+
+    @OneToMany(() => TargetEntity, target => target.clientInfo, { cascade: [Cascade.ALL] })
+    targets = new Collection<TargetEntity>(this);
 
     constructor(phoneNumber: string, name: string, email: string) {
         this.id = uuid();
@@ -38,9 +45,8 @@ export class ClientInfoEntity {
         this.email = email;
     }
 
-    public setAdditionalInfo(birthDay: Date, about: string, contraindications: string) {
+    public setAdditionalInfo(birthDay: Date, contraindications: string) {
         this.birthDay = birthDay;
-        this.about = about;
         this.contraindications = contraindications;
     }
 }

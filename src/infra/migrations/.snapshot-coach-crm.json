@@ -52,15 +52,6 @@
           "length": 6,
           "mappedType": "datetime"
         },
-        "about": {
-          "name": "about",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
         "contraindications": {
           "name": "contraindications",
           "type": "varchar(255)",
@@ -69,6 +60,26 @@
           "primary": false,
           "nullable": false,
           "mappedType": "string"
+        },
+        "update_at": {
+          "name": "update_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
         }
       },
       "name": "client_info",
@@ -86,6 +97,84 @@
       ],
       "checks": [],
       "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "desire": {
+          "name": "desire",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "enum"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "client_info_id": {
+          "name": "client_info_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "target",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "target_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "target_client_info_id_foreign": {
+          "constraintName": "target_client_info_id_foreign",
+          "columnNames": [
+            "client_info_id"
+          ],
+          "localTableName": "public.target",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.client_info",
+          "updateRule": "cascade"
+        }
+      }
     },
     {
       "columns": {
