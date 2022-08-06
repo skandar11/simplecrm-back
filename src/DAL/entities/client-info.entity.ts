@@ -1,4 +1,5 @@
-import { Entity, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { TargetEntity } from './target.entity';
+import { Cascade, Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid";
 
@@ -33,6 +34,9 @@ export class ClientInfoEntity {
 
     @OneToOne(() => UserEntity, user => user.clientInfo)
     user: UserEntity;
+
+    @OneToMany(() => TargetEntity, target => target.clientInfo, { cascade: [Cascade.ALL] })
+    targets = new Collection<TargetEntity>(this);
 
     constructor(phoneNumber: string, name: string, email: string) {
         this.id = uuid();

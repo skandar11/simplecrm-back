@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 
 import { AuthController } from './auth.controller';
+import { TargetController } from './target.controller';
 import { ClientInfoController } from './client-info.controller';
+
 import { ServiceModule } from 'src/services/service.module';
 import { JwtStrategy } from 'src/infra/guards/jwt-strategy';
 
@@ -11,7 +13,7 @@ import { JwtStrategy } from 'src/infra/guards/jwt-strategy';
         ServiceModule,
         PassportModule.register({ defaultStrategy: "jwt" }),
     ],
-    controllers: [AuthController, ClientInfoController],
+    controllers: [AuthController, ClientInfoController, TargetController],
     providers: [JwtStrategy]
 })
 export class ControllerModule { }
