@@ -1,3 +1,5 @@
+import { TargetDto } from './../../dto/target.dto';
+import { TargetEntity } from './../../DAL/entities/target.entity';
 import { ClientInfoDto } from './../../dto/client-info.dto';
 import { ClientInfoEntity } from './../../DAL/entities/client-info.entity';
 
@@ -14,6 +16,19 @@ export class MapperUtil {
             result.updateAt = item.updateAt;
             result.createAt = item.createdAt;
             result.status = item.status;
+            return result;
+        })
+    }
+
+    static mapTarget(targets: TargetEntity[]): TargetDto[] {
+        return targets.map(item => {
+            const result = new TargetDto();
+
+            result.id = item.id;
+            result.desire = item.desire;
+            result.status = item.status;
+            result.createdAt = item.createdAt;
+
             return result;
         })
     }
