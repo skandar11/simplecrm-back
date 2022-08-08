@@ -1,3 +1,4 @@
+import { UpdateClientInfoDto } from './../dto/update-client-info.dto';
 import { UniHttpException } from '@unistory/nestjs-common';
 import { Injectable } from '@nestjs/common';
 
@@ -69,6 +70,33 @@ export class ClientInfoService {
         }
 
         info.status = ClientStatus.Deleted;
+        await this._clientInfoRepository.persistAndFlush(info);
+    }
+
+    public async updateClientInfo(userId: string, clientId: string, updateClientInfoDto: UpdateClientInfoDto): Promise<void> {
+        const info = await this.getClientInfoByIdOrFail(userId, clientId);
+        const { birthDay, contraindications, email, name, phoneNumber } = updateClientInfoDto;
+
+        if (birthDay != null) {
+            info.birthDay = birthDay;
+        }
+
+        if (contraindications != null) {
+            info.contraindications = contraindications;
+        }
+
+        if (email != null) {
+            info.email = email;
+        }
+
+        if (name != null) {
+            info.name = name;
+        }
+
+        if (phoneNumber != null) {
+            info.phoneNumber = phoneNumber;
+        }
+
         await this._clientInfoRepository.persistAndFlush(info);
     }
 

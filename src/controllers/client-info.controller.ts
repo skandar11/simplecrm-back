@@ -12,6 +12,7 @@ import { Roles } from 'src/infra/guards/roles.decorator';
 import { UserPayloadModel } from 'src/models/user-payload.model';
 import { RolesGuard } from 'src/infra/guards/roles.guard';
 import { UserRoleEnum } from 'src/infra/enums/user-role.enum';
+import { UpdateClientInfoDto } from 'src/dto/update-client-info.dto';
 
 @Controller("client-info")
 @UseGuards(AuthGuard(), RolesGuard)
@@ -38,5 +39,10 @@ export class ClientInfoController {
     @HttpCode(HttpStatus.NO_CONTENT)
     deleteClientInfo(@getUser() payload: UserPayloadModel, @Param("id") id: string): Promise<void> {
         return this._clientInfoService.delete(payload.id, id);
+    }
+
+    @UniDecorators.Put(":id", "update client-info by id", false)
+    updateClientInfo(@getUser() payload: UserPayloadModel, @Param("id") id: string, @Body() updateClientInfoDto: UpdateClientInfoDto): Promise<void> {
+        return this._clientInfoService.updateClientInfo(payload.id, id, updateClientInfoDto);
     }
 }
