@@ -61,6 +61,16 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "1",
+          "mappedType": "enum"
+        },
         "update_at": {
           "name": "update_at",
           "type": "timestamptz(0)",
