@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^8.4.6",
     "@nestjs/swagger": "^5.2.1",
     "@unistory/nestjs-common": "^1.0.4",
+    "@unistory/nestjs-logger": "^1.0.6",
     "@unistory/route-decorators": "^1.0.2",
     "app-root-path": "^3.0.0",
     "bcrypt": "^5.0.1",
