@@ -1,4 +1,4 @@
-import { Options } from "@mikro-orm/core";
+import { LoadStrategy, Options } from "@mikro-orm/core";
 
 import { path } from "app-root-path"
 import { join } from 'path';
@@ -14,12 +14,12 @@ const config: Options = {
     password: "postgres",
     dbName: "coach-crm",
     entities: [UserEntity, ClientInfoEntity],
+    loadStrategy: LoadStrategy.JOINED,
     migrations: {
         path: join(path, "dist/infra/migrations"),
         pathTs: join(path, "src/infra/migrations"),
         allOrNothing: true
-    },
-
+    }
 }
 
 export default config;
