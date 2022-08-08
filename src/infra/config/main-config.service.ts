@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtModuleOptions } from "@nestjs/jwt";
+import { ElasticSearchConfiguration } from "@unistory/nestjs-logger";
 import { SwaggerConfigModel } from "src/infra/config/models/swagger-config.model";
 
 @Injectable()
@@ -33,5 +34,9 @@ export class MainConfigService {
                 expiresIn: this._configService.get<string>("JWT_EXPIRES")
             }
         }
+    }
+
+    get elasticSearchConfig(): ElasticSearchConfiguration {
+        return null;
     }
 }

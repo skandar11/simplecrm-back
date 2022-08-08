@@ -1,10 +1,12 @@
-import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
+import { LoggerService } from "@unistory/nestjs-logger";
 import { UniResponseInterceptor } from "@unistory/nestjs-common";
-import { MainConfigService } from "./infra/config/main-config.service";
+
 import { AppModule } from './app.module';
+import { MainConfigService } from "./infra/config/main-config.service";
 
 async function main() {
     const app = await NestFactory.create(AppModule, { cors: true });
@@ -17,7 +19,9 @@ async function main() {
         })
     );
 
-    app.useGlobalInterceptors(new UniResponseInterceptor());
+    const logger = app.get(LoggerService);
+    app.useGlobalInterceptors(new UniResponseInterceptor(logger));
+
     app.setGlobalPrefix("api");
 
     const config = app.get(MainConfigService);
@@ -36,6 +40,8 @@ async function main() {
         .build();
     const docs = SwaggerModule.createDocument(app, docsConfig);
     SwaggerModule.setup("api/swagger", app, docs);
+
+
 
     app.listen(config.port || 3000);
 }
