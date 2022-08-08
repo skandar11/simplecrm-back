@@ -10,7 +10,6 @@ import { ClientStatus } from 'src/infra/enums/client-status.enum';
 import { ClientInfoDto } from './../dto/client-info.dto';
 import { SetClientInfoDto } from './../dto/set-client-info.dto';
 import { ClientInfoEntity } from './../DAL/entities/client-info.entity';
-import { LoadStrategy } from '@mikro-orm/core';
 
 @Injectable()
 export class ClientInfoService {
@@ -20,19 +19,18 @@ export class ClientInfoService {
     ) { }
 
     public async getOne(userId: string, clientId: string): Promise<ClientInfoDto> {
-        const client = await this._userRepository.findOne({ createdBy: userId }, { populateWhere: { clientInfo: { status: { $ne: ClientStatus.Deleted } } } })
-        return;
+        const client = await this.getClientInfoByIdOrFail(userId, clientId);
+
+        const mappedClient = MapperUtil.mapClientInfo([client]);
+        return mappedClient[0];
     }
 
     public async getAll(userId: string): Promise<ClientInfoDto[]> {
         const clients = await this._userRepository.find({
-            createdBy: userId
+            createdBy: userId,
+            clientInfo: { status: { $ne: ClientStatus.Deleted } }
         }, {
-            populateWhere: {
-                clientInfo: {
-                    status: { $ne: ClientStatus.Deleted }
-                }
-            },
+            populate: ["clientInfo"],
             fields: ["clientInfo"]
         });
 
@@ -62,6 +60,32 @@ export class ClientInfoService {
         info.user = client;
 
         await this._clientInfoRepository.persistAndFlush(info);
+    }
+
+    public async delete(userId: string, clientId: string): Promise<void> {
+        const info = await this.getClientInfoByIdOrFail(userId, clientId);
+        if (info.status == ClientStatus.Deleted) {
+            throw new UniHttpException("Client with id {id}: already deleted", clientId);
+        }
+
+        info.status = ClientStatus.Deleted;
+        await this._clientInfoRepository.persistAndFlush(info);
+    }
+
+    private async getClientInfoByIdOrFail(userId: string, clientId: string): Promise<ClientInfoEntity> {
+        const client = await this._userRepository.findOne({
+            createdBy: userId,
+            clientInfo: { id: clientId }
+        }, {
+            populate: ["clientInfo"],
+            fields: ["clientInfo"]
+        });
+
+        if (client == null) {
+            throw new UniHttpException("Client with id {id}: not found", clientId);
+        }
+
+        return client.clientInfo;
     }
 
 }

@@ -6,9 +6,4 @@ export class CreateClientDto {
     @IsPhoneNumber()
     @IsNotEmpty()
     login: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    name: string;
 }

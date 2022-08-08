@@ -60,7 +60,7 @@ export class AuthService {
     }
 
     async createClient(createClientDto: CreateClientDto, coachId: string): Promise<LoginDto> {
-        const { login, name } = createClientDto;
+        const { login } = createClientDto;
 
         const existsUser = await this._userRepository.findOne({ login });
         if (existsUser != null) {
