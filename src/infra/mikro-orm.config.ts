@@ -11,7 +11,7 @@ const config: Options = {
     host: "localhost",
     port: 5432,
     user: "postgres",
-    password: "postgres",
+    password: "admin",
     dbName: "coach-crm",
     entities: [UserEntity, ClientInfoEntity],
     loadStrategy: LoadStrategy.JOINED,

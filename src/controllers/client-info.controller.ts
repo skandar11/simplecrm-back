@@ -1,6 +1,6 @@
 import { AuthGuard } from '@nestjs/passport';
 import { UniDecorators } from '@unistory/route-decorators';
-import { Body, Controller, Param, UseGuards } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Param, UseGuards } from "@nestjs/common";
 
 import { ClientInfoDto } from './../dto/client-info.dto';
 import { SetClientInfoDto } from './../dto/set-client-info.dto';
@@ -12,6 +12,7 @@ import { Roles } from 'src/infra/guards/roles.decorator';
 import { UserPayloadModel } from 'src/models/user-payload.model';
 import { RolesGuard } from 'src/infra/guards/roles.guard';
 import { UserRoleEnum } from 'src/infra/enums/user-role.enum';
+import { UpdateClientInfoDto } from 'src/dto/update-client-info.dto';
 
 @Controller("client-info")
 @UseGuards(AuthGuard(), RolesGuard)
@@ -29,8 +30,19 @@ export class ClientInfoController {
         return this._clientInfoService.getAll(payload.id);
     }
 
-    @UniDecorators.Get("/one/:id", "get all clients-info", true, ClientInfoDto)
-    getOne(@getUser() payload: UserPayloadModel, @Param("id") id: string): Promise<ClientInfoDto[]> {
-        return this._clientInfoService.getAll(payload.id);
+    @UniDecorators.Get("/one/:id", "get concrete clients-info", true, ClientInfoDto)
+    getOne(@getUser() payload: UserPayloadModel, @Param("id") id: string): Promise<ClientInfoDto> {
+        return this._clientInfoService.getOne(payload.id, id);
+    }
+
+    @UniDecorators.Delete(":id", "soft deleting by id", false)
+    @HttpCode(HttpStatus.NO_CONTENT)
+    deleteClientInfo(@getUser() payload: UserPayloadModel, @Param("id") id: string): Promise<void> {
+        return this._clientInfoService.delete(payload.id, id);
+    }
+
+    @UniDecorators.Put(":id", "update client-info by id", false)
+    updateClientInfo(@getUser() payload: UserPayloadModel, @Param("id") id: string, @Body() updateClientInfoDto: UpdateClientInfoDto): Promise<void> {
+        return this._clientInfoService.updateClientInfo(payload.id, id, updateClientInfoDto);
     }
 }
