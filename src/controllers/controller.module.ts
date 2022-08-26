@@ -7,13 +7,14 @@ import { ClientInfoController } from './client-info.controller';
 
 import { ServiceModule } from 'src/services/service.module';
 import { JwtStrategy } from 'src/infra/guards/jwt-strategy';
+import { CommentController } from './comment.controller';
 
 @Module({
     imports: [
         ServiceModule,
         PassportModule.register({ defaultStrategy: "jwt" }),
     ],
-    controllers: [AuthController, ClientInfoController, TargetController],
+    controllers: [AuthController, ClientInfoController, TargetController, CommentController],
     providers: [JwtStrategy]
 })
 export class ControllerModule { }

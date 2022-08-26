@@ -5,9 +5,11 @@
 # IDE - VSCode
 /.vscode
 
-# npm install output
-/yarn.lock
+# yarn install output
 /yarn-error.log
 
 # orm config
 /mikro-orm.config.ts
+
+# runtime logs
+/logs

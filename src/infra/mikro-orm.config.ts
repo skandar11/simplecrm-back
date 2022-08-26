@@ -1,3 +1,5 @@
+import { CommentEntity } from './../DAL/entities/comment.entity';
+import { TargetEntity } from './../DAL/entities/target.entity';
 import { LoadStrategy, Options } from "@mikro-orm/core";
 
 import { path } from "app-root-path"
@@ -13,7 +15,7 @@ const config: Options = {
     user: "postgres",
     password: "admin",
     dbName: "coach-crm",
-    entities: [UserEntity, ClientInfoEntity],
+    entities: [UserEntity, ClientInfoEntity, TargetEntity, CommentEntity],
     loadStrategy: LoadStrategy.JOINED,
     migrations: {
         path: join(path, "dist/infra/migrations"),

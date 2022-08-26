@@ -1,3 +1,4 @@
+import { TargetDto } from 'src/dto/target.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Body, Param, UseGuards } from '@nestjs/common';
 
@@ -31,8 +32,8 @@ export class TargetController {
         return this._targetService.updateTarget(payload.id, id, updateTargetDto);
     }
 
-    @UniDecorators.Get("all/:clientId", "get all targets by client id", false)
-    getAll(@getUser() payload: UserPayloadModel, @Param("clientId") clientId: string): Promise<any> {
+    @UniDecorators.Get("all/:clientId", "get all targets by client id", true, TargetDto)
+    getAll(@getUser() payload: UserPayloadModel, @Param("clientId") clientId: string): Promise<TargetDto[]> {
         return this._targetService.getAll(payload.id, clientId);
     }
 

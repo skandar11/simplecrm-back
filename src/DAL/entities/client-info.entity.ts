@@ -1,11 +1,13 @@
-import { ClientStatus } from './../../infra/enums/client-status.enum';
-import { TargetEntity } from './target.entity';
-import { Cascade, Collection, Entity, Enum, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Cascade, Collection, Entity, Enum } from "@mikro-orm/core";
+import { OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid";
 
 import { ClientInfoRepository } from "../repositories/client.repository";
+import { ClientStatus } from './../../infra/enums/client-status.enum';
+
 import { UserEntity } from "./user.entity";
+import { TargetEntity } from './target.entity';
 
 @Entity({ tableName: "client_info", customRepository: () => ClientInfoRepository })
 export class ClientInfoEntity {

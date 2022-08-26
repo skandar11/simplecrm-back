@@ -41,8 +41,6 @@ async function main() {
     const docs = SwaggerModule.createDocument(app, docsConfig);
     SwaggerModule.setup("api/swagger", app, docs);
 
-
-
     app.listen(config.port || 3000);
 }
 
