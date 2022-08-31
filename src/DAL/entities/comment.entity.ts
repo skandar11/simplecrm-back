@@ -1,10 +1,11 @@
+import { CommentRepository } from './../repositories/comment.repository';
 import { TargetEntity } from './target.entity';
 import { Entity, Enum, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid";
 import { CommentTypeEnum } from './../../infra/enums/comment-type.enum';
 
-@Entity({ tableName: "comment" })
+@Entity({ tableName: "comment", customRepository: () => CommentRepository })
 export class CommentEntity {
     @PrimaryKey()
     id: string;

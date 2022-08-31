@@ -1,3 +1,5 @@
+import { CommentDto } from './../../dto/comment.dto';
+import { CommentEntity } from './../../DAL/entities/comment.entity';
 import { TargetDto } from './../../dto/target.dto';
 import { TargetEntity } from './../../DAL/entities/target.entity';
 import { ClientInfoDto } from './../../dto/client-info.dto';
@@ -29,6 +31,18 @@ export class MapperUtil {
             result.status = item.status;
             result.createdAt = item.createdAt;
 
+            return result;
+        })
+    }
+
+    static mapComment(comments: CommentEntity[]): CommentDto[] {
+        return comments.map(item => {
+            const result = new CommentDto();
+
+            result.id = item.id;
+            result.content = item.content;
+            result.createdAt = item.createdAt;
+            result.commentType = item.commentType;
             return result;
         })
     }

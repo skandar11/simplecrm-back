@@ -8,12 +8,12 @@ import { join } from 'path';
 import { UserEntity } from "../DAL/entities/user.entity";
 import { ClientInfoEntity } from './../DAL/entities/client-info.entity';
 
-const config: Options = {
+export const config: Options = {
     type: "postgresql",
     host: "localhost",
     port: 5432,
     user: "postgres",
-    password: "admin",
+    password: "postgres",
     dbName: "coach-crm",
     entities: [UserEntity, ClientInfoEntity, TargetEntity, CommentEntity],
     loadStrategy: LoadStrategy.JOINED,

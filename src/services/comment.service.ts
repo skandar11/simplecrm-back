@@ -1,5 +1,3 @@
-import { TargetEntity } from './../DAL/entities/target.entity';
-import { CommentTypeEnum } from './../infra/enums/comment-type.enum';
 import { UniHttpException } from '@unistory/nestjs-common';
 import { Injectable } from "@nestjs/common";
 
@@ -9,16 +7,29 @@ import * as fs from "fs";
 import { v4 as uuid } from "uuid";
 import { path as rootPath } from 'app-root-path';
 
-import { TargetRepository } from "src/DAL/repositories/target.repository";
-import { TargetStatus } from "src/infra/enums/target-status.enum";
+import { TargetEntity } from './../DAL/entities/target.entity';
 import { CommentEntity } from './../DAL/entities/comment.entity';
+import { TargetRepository } from "src/DAL/repositories/target.repository";
+
 import { CreateCommentDto } from './../dto/create-comment.dto';
+import { TargetStatus } from "src/infra/enums/target-status.enum";
+import { CommentTypeEnum } from './../infra/enums/comment-type.enum';
+import { CommentRepository } from 'src/DAL/repositories/comment.repository';
+import { CommentDto } from 'src/dto/comment.dto';
 
 @Injectable()
 export class CommentService {
     private readonly pathToFileFolder = join(rootPath, "/public");
 
-    constructor(private readonly _targetRepo: TargetRepository) { }
+    constructor(
+        private readonly _targetRepo: TargetRepository,
+        private readonly _commentRepo: CommentRepository
+    ) { }
+
+    public async getAllTargetsComment(userId: string, targetId: string): Promise<CommentDto[]> {
+        const comments = await this._commentRepo.find({target: {id: targetId}})
+        return
+    }
 
     public async addFileToTarget(userId: string, file: Express.Multer.File, createCommentDto: CreateCommentDto): Promise<void> {
         const targetId = createCommentDto.destinationId;
@@ -36,17 +47,17 @@ export class CommentService {
             const comment = this.createFileComment(file);
             comment.target = target;
 
-            this._targetRepo.persist(comment);
+            this._commentRepo.persist(comment);
         }
 
         if (createCommentDto.text != null) {
             const comment = this.createTextComment(createCommentDto.text);
             comment.target = target;
 
-            this._targetRepo.persist(comment);
+            this._commentRepo.persist(comment);
         }
 
-        await this._targetRepo.flush();
+        await this._commentRepo.flush();
     }
 
     private createFileComment(file: Express.Multer.File): CommentEntity {
@@ -61,7 +72,7 @@ export class CommentService {
     private async getValidTarget(targetId: string, userId: string): Promise<TargetEntity> {
         return await this._targetRepo.findOne({
             id: targetId,
-            clientInfo: { user: { id: userId } },
+            clientInfo: { user: { createdBy: userId } },
             status: TargetStatus.Active
         });
     }

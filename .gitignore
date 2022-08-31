@@ -13,3 +13,6 @@
 
 # runtime logs
 /logs
+
+# local env
+/.local.env

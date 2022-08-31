@@ -5,7 +5,7 @@ export class CreateCommentDto {
     @ApiProperty()
     @IsString()
     @IsOptional()
-    text: string;
+    text?: string;
 
     @ApiProperty()
     @IsNotEmpty()

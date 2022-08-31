@@ -10,6 +10,7 @@
     "build": "nest build",
     "start": "node ./dist/src/main.js",
     "start:dev": "cross-env NODE_ENV=development nodemon",
+    "start:local": "cross-env NODE_ENV=local nodemon",
     "start:prod": "npx cross-env NODE_ENV=production node ./dist/main.js",
     "migration:create": "yarn mikro-orm migration:create",
     "migration:up": "yarn mikro-orm migration:up",
