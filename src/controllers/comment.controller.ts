@@ -1,5 +1,4 @@
-import { CommentDto } from './../dto/comment.dto';
-import { CommentService } from './../services/comment.service';
+
 import { AuthGuard } from '@nestjs/passport';
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { Body, Param, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
@@ -12,6 +11,8 @@ import { getUser } from "src/infra/guards/get-user.decorator";
 import { UserRoleEnum } from "src/infra/enums/user-role.enum";
 import { CreateCommentDto } from './../dto/create-comment.dto';
 import { UserPayloadModel } from "src/models/user-payload.model";
+import { CommentDto } from './../dto/comment.dto';
+import { CommentService } from './../services/comment.service';
 
 @UniDecorators.Controller("comments")
 @UseGuards(AuthGuard(), RolesGuard)
@@ -30,6 +31,6 @@ export class CommentController {
 
     @UniDecorators.Get("/target/:id", "Get all comments", true, CommentDto)
     public getAllTargetsComment(@getUser() payload: UserPayloadModel, @Param("id") id: string): Promise<CommentDto[]> {
-        return
+        return this._commentService.getAllTargetsComment(payload.id, id);
     }
 }

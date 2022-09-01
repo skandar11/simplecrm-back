@@ -16,3 +16,6 @@
 
 # local env
 /.local.env
+
+# static folder
+/public

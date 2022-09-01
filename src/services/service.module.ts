@@ -1,3 +1,4 @@
+import { MapperService } from './mapper.service';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
@@ -13,6 +14,8 @@ import { TargetEntity } from './../DAL/entities/target.entity';
 import { ClientInfoEntity } from './../DAL/entities/client-info.entity';
 import { MainConfigModule } from 'src/infra/config/main-config.module';
 import { CommentEntity } from 'src/DAL/entities/comment.entity';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 @Module({
     imports: [
@@ -21,9 +24,12 @@ import { CommentEntity } from 'src/DAL/entities/comment.entity';
             useFactory: (config: MainConfigService) => config.jwtOptions,
             inject: [MainConfigService]
         }),
-        MikroOrmModule.forFeature({ entities: [UserEntity, ClientInfoEntity, TargetEntity, CommentEntity] })
+        MikroOrmModule.forFeature({ entities: [UserEntity, ClientInfoEntity, TargetEntity, CommentEntity] }),
+        AutomapperModule.forRoot({
+            strategyInitializer: classes()
+        })
     ],
-    providers: [AuthService, ClientInfoService, TargetService, CommentService],
+    providers: [AuthService, ClientInfoService, TargetService, CommentService, MapperService],
     exports: [AuthService, ClientInfoService, TargetService, CommentService],
 })
 export class ServiceModule { }

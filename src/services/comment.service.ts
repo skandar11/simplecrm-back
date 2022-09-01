@@ -1,11 +1,13 @@
+import { Constants } from './../infra/constants';
 import { UniHttpException } from '@unistory/nestjs-common';
 import { Injectable } from "@nestjs/common";
 
 import { extension as getFileExtension } from "mime-types";
-import { join } from 'path';
+import { InjectMapper } from '@automapper/nestjs';
 import * as fs from "fs";
+import { join } from 'path';
 import { v4 as uuid } from "uuid";
-import { path as rootPath } from 'app-root-path';
+import type { Mapper } from "@automapper/core";
 
 import { TargetEntity } from './../DAL/entities/target.entity';
 import { CommentEntity } from './../DAL/entities/comment.entity';
@@ -19,16 +21,16 @@ import { CommentDto } from 'src/dto/comment.dto';
 
 @Injectable()
 export class CommentService {
-    private readonly pathToFileFolder = join(rootPath, "/public");
-
     constructor(
         private readonly _targetRepo: TargetRepository,
-        private readonly _commentRepo: CommentRepository
+        private readonly _commentRepo: CommentRepository,
+        @InjectMapper()
+        private readonly _mapper: Mapper
     ) { }
 
     public async getAllTargetsComment(userId: string, targetId: string): Promise<CommentDto[]> {
-        const comments = await this._commentRepo.find({target: {id: targetId}})
-        return
+        const comments = await this._commentRepo.getUserTargetComments(userId, targetId);
+        return this._mapper.mapArray(comments, CommentEntity, CommentDto);
     }
 
     public async addFileToTarget(userId: string, file: Express.Multer.File, createCommentDto: CreateCommentDto): Promise<void> {
@@ -80,9 +82,15 @@ export class CommentService {
     private saveFile(buffer: Buffer, mimeType: string): string {
         const name = uuid();
         const extension = getFileExtension(mimeType);
-        const fullPath = join(this.pathToFileFolder, `${name}.${extension}`);
+
+        const fullFileName = `${name}.${extension}`;
+        const fullPath = join(Constants.PATH_TO_STATIC_FOLDER, fullFileName);
 
         fs.writeFileSync(fullPath, buffer);
-        return fullPath;
+        return this.getPathToFile(fullFileName);
+    }
+
+    private getPathToFile(fileName: string): string {
+        return "api/public/" + fileName;
     }
 }
