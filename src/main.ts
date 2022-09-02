@@ -1,7 +1,7 @@
 import { MikroORM } from "@mikro-orm/core";
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { ApiCookieAuth, DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 import { LoggerService } from "@unistory/nestjs-logger";
 import { UniResponseInterceptor } from "@unistory/nestjs-common";
@@ -13,7 +13,7 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 import { Constants } from "./infra/constants";
 
 async function main() {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true });
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     const orm = await MikroORM.init(dbConfig);
     const migrator = orm.getMigrator();
@@ -21,6 +21,7 @@ async function main() {
     await migrator.up();
     await orm.close();
 
+    app.enableCors();
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
