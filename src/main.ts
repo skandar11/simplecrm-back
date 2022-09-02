@@ -21,7 +21,7 @@ async function main() {
     await migrator.up();
     await orm.close();
 
-    app.enableCors();
+    app.enableCors({ origin: "http://80.78.244.97:3001" });
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
