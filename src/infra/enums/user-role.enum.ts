@@ -1,3 +1,4 @@
 export enum UserRoleEnum {
-    "Coach", "Client"
+    "Coach" = 0,
+    "Client" = 1
 }

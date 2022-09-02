@@ -1,3 +1,5 @@
 export enum TargetStatus {
-    "Done", "Active", "Deleted"
+    "Done" = 0,
+    "Active" = 1,
+    "Deleted" = 2
 }

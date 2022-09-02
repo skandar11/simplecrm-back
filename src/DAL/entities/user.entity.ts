@@ -1,10 +1,12 @@
-import { ClientInfoEntity } from './client-info.entity';
-import { UserRoleEnum } from '../../infra/enums/user-role.enum';
-import { Entity, Enum, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { ProductEntity } from './product.entity';
+import { Cascade, Collection, Entity, Enum, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid"
 import { UserRepository } from '../repositories/user.repository';
 import { UserPayloadModel } from "src/models/user-payload.model";
+
+import { ClientInfoEntity } from './client-info.entity';
+import { UserRoleEnum } from '../../infra/enums/user-role.enum';
 
 @Entity({ tableName: "user", customRepository: () => UserRepository })
 export class UserEntity {
@@ -28,6 +30,9 @@ export class UserEntity {
 
     @Property({ onCreate: () => new Date() })
     createdAt: Date;
+
+    @OneToMany(() => ProductEntity, product => product.user, { cascade: [Cascade.ALL] })
+    products = new Collection<ProductEntity>(this);
 
     @OneToOne(() => ClientInfoEntity, info => info.user, { owner: true, orphanRemoval: true, nullable: true })
     clientInfo: ClientInfoEntity;

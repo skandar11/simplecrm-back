@@ -1,11 +1,14 @@
-import { ClientStatus } from './../../infra/enums/client-status.enum';
-import { TargetEntity } from './target.entity';
-import { Cascade, Collection, Entity, Enum, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { SubscriptionEntity } from './subscription.entity';
+import { Cascade, Collection, Entity, Enum } from "@mikro-orm/core";
+import { OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 
 import { v4 as uuid } from "uuid";
 
 import { ClientInfoRepository } from "../repositories/client.repository";
+import { ClientStatus } from './../../infra/enums/client-status.enum';
+
 import { UserEntity } from "./user.entity";
+import { TargetEntity } from './target.entity';
 
 @Entity({ tableName: "client_info", customRepository: () => ClientInfoRepository })
 export class ClientInfoEntity {
@@ -41,6 +44,9 @@ export class ClientInfoEntity {
 
     @OneToMany(() => TargetEntity, target => target.clientInfo, { cascade: [Cascade.ALL] })
     targets = new Collection<TargetEntity>(this);
+
+    @OneToMany(() => SubscriptionEntity, sub => sub.clientInfo, { cascade: [Cascade.ALL] })
+    subscriptions = new Collection<SubscriptionEntity>(this);
 
     constructor(phoneNumber: string, name: string, email: string) {
         this.id = uuid();

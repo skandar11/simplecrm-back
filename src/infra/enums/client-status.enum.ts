@@ -1,3 +1,5 @@
 export enum ClientStatus {
-    "Active", "WaitingPayment", "Deleted"
+    "Active" = 0,
+    "WaitingPayment" = 1,
+    "Deleted" = 2
 }

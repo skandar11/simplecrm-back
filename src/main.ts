@@ -1,3 +1,4 @@
+import { MikroORM } from "@mikro-orm/core";
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -7,9 +8,18 @@ import { UniResponseInterceptor } from "@unistory/nestjs-common";
 
 import { AppModule } from './app.module';
 import { MainConfigService } from "./infra/config/main-config.service";
+import { config as dbConfig } from "./infra/mikro-orm.config"
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { Constants } from "./infra/constants";
 
 async function main() {
-    const app = await NestFactory.create(AppModule, { cors: true });
+    const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true });
+
+    const orm = await MikroORM.init(dbConfig);
+    const migrator = orm.getMigrator();
+
+    await migrator.up();
+    await orm.close();
 
     app.useGlobalPipes(
         new ValidationPipe({
@@ -41,7 +51,9 @@ async function main() {
     const docs = SwaggerModule.createDocument(app, docsConfig);
     SwaggerModule.setup("api/swagger", app, docs);
 
-
+    app.useStaticAssets(Constants.PATH_TO_STATIC_FOLDER, {
+        prefix: "/api/public/"
+    });
 
     app.listen(config.port || 3000);
 }
