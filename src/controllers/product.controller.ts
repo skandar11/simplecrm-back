@@ -30,4 +30,3 @@ export class ProductController {
         return this._productService.getAll(payload.id);
     }
 }
-
